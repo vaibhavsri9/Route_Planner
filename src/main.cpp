@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <io2d.h>
+// #include <float>
 #include "route_model.h"
 #include "render.h"
 #include "route_planner.h"
@@ -11,14 +12,14 @@
 using namespace std::experimental;
 
 static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
-{   
+{
     std::ifstream is{path, std::ios::binary | std::ios::ate};
     if( !is )
         return std::nullopt;
-    
+
     auto size = is.tellg();
-    std::vector<std::byte> contents(size);    
-    
+    std::vector<std::byte> contents(size);
+
     is.seekg(0);
     is.read((char*)contents.data(), size);
 
@@ -28,7 +29,7 @@ static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
 }
 
 int main(int argc, const char **argv)
-{    
+{
     std::string osm_data_file = "";
     if( argc > 1 ) {
         for( int i = 1; i < argc; ++i )
@@ -40,9 +41,9 @@ int main(int argc, const char **argv)
         std::cout << "Usage: [executable] [-f filename.osm]" << std::endl;
         osm_data_file = "../map.osm";
     }
-    
+
     std::vector<std::byte> osm_data;
- 
+
     if( osm_data.empty() && !osm_data_file.empty() ) {
         std::cout << "Reading OpenStreetMap data from the following file: " <<  osm_data_file << std::endl;
         auto data = ReadFile(osm_data_file);
@@ -51,16 +52,27 @@ int main(int argc, const char **argv)
         else
             osm_data = std::move(*data);
     }
-    
+
     // TODO 1: Declare floats `start_x`, `start_y`, `end_x`, and `end_y` and get
     // user input for these values using std::cin. Pass the user input to the
     // RoutePlanner object below in place of 10, 10, 90, 90.
-
+    float start_x;
+    float start_y;
+    float end_x;
+    float end_y;
+    std::cout  << "Input Starting x and y" << std::endl;
+    std::cin >> start_x;
+    std::cout <<"\n"<< std::endl;
+    std::cin >> start_y;
+    std::cout  << "Input ending x and y" << std::endl;
+    std::cin >>  end_x;
+    std::cout <<"\n"<< std::endl;
+    std::cin >> end_y;
     // Build Model.
     RouteModel model{osm_data};
 
     // Create RoutePlanner object and perform A* search.
-    RoutePlanner route_planner{model, 10, 10, 90, 90};
+    RoutePlanner route_planner{model, start_x, start_y, end_x, end_y};
     route_planner.AStarSearch();
 
     std::cout << "Distance: " << route_planner.GetDistance() << " meters. \n";
