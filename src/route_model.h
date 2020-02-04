@@ -17,6 +17,7 @@ class RouteModel : public Model {
         float g_value = 0.0;
         bool visited = false;
         std::vector<Node *> neighbors;
+        // neighbours is an vector of pointers
 
         void FindNeighbors();
         float distance(Node other) const {
@@ -36,7 +37,7 @@ class RouteModel : public Model {
     Node &FindClosestNode(float x, float y);
     auto &SNodes() { return m_Nodes; }
     std::vector<Node> path;
-    
+
   private:
     void CreateNodeToRoadHashmap();
     std::unordered_map<int, std::vector<const Model::Road *>> node_to_road;
