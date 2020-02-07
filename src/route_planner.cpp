@@ -58,7 +58,7 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
      std::cout << " the g_value of the current node is " << v->g_value << "\n";
 */
    }
-  // std::cout << open_list << "\n";
+
 }
 
 
@@ -103,15 +103,15 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
     std::vector<RouteModel::Node> path_found;
     // TODO: Implement your solution here.
 
-    while(current_node->parent != nullptr)
+    while(current_node != start_node)
     {
       path_found.emplace_back(*current_node);
       const RouteModel::Node parent = *(current_node->parent);
       distance += current_node->distance(parent);
       current_node = current_node->parent;
-
     }
     path_found.emplace_back(*current_node);
+    reverse(path_found.begin(),path_found.end());
     distance *= m_Model.MetricScale(); // Multiply the distance by the scale of the map to get meters.
     return path_found;
 
@@ -127,10 +127,28 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
 
 void RoutePlanner::AStarSearch() {
 
-    start_node->visited = true;
-    open_list.emplace_back(start_node);
+  start_node->visited = true;
+  open_list.emplace_back(start_node);
+  while (!open_list.empty()){
+      RouteModel::Node* current_node = NextNode();
+        if(current_node->distance(*end_node) == 0){
+          m_Model.path = ConstructFinalPath(current_node);
+          break;
+        }else{
+          AddNeighbors(current_node);
+              }
 
-    while(!open_list.empty()){
+        }
+
+          //compare g_value of the neighbors if it's already in the open list
+               // if the neighbor is not in the open list
+
+
+      // if the current_node is in the open list
+          // sort the open_list vector based on the g_value
+          // if current_node->g_value > any auto v : open_list then that v becomes v = curren
+}
+  /*  while(!open_list.empty()){
       RouteModel::Node* current_node = NextNode();
 
       if(current_node->distance(*end_node) == 0){
@@ -139,5 +157,4 @@ void RoutePlanner::AStarSearch() {
 
       AddNeighbors(current_node);
 
-    }
-}
+    }*/
