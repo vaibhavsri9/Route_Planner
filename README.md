@@ -47,4 +47,10 @@ The testing executable is also placed in the `build` directory. From within `bui
 ```
 ./test
 ```
+## Further Reading
+
+For reading further about time complexities and different methods involved with Route searching, access this link:
+
+http://theory.stanford.edu/~amitp/GameProgramming/AStarComparison.html
+
 
